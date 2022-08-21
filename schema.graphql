@@ -1,0 +1,103 @@
+type Query {
+  hello: String!
+
+  users: [User!]
+  user(id: ID!): User
+
+  blogs(filter: FilterInput, sortBy: SortInput): [Blog!]
+  blog(id: ID): Blog
+}
+
+input FilterInput {
+  categories: [String!]
+  user: ID
+}
+
+input SortInput {
+  key: String
+  order: String
+}
+
+type LoginData {
+  token: String
+  user: User
+}
+
+type Mutation {
+  register(input: createUserInput!): User
+  login(email: String!, password: String!): LoginData
+  update(input: UpdateUserInput): User
+
+  createBlog(input: createBlogInput!): Blog
+  likeUnlikeBlog(blogId: String!): Blog
+  commentOnBlog(blogId: String!, comment: String!): Blog
+}
+
+type User {
+  id: ID!
+  username: String!
+  profilePicture: String
+  email: String!
+  isAdmin: Boolean!
+  createdAt: String!
+  updatedAt: String!
+  blogs: [Blog!]
+}
+
+type Blog {
+  id: ID!
+  title: String!
+  description: String!
+  image: String!
+  categories: [String!]
+  createdAt: String!
+  updatedAt: String!
+  comments: [Comment!]
+  user: User!
+  likes: [User!]
+}
+
+type Comment {
+  id: ID!
+  comment: String!
+  date: String!
+  user: User!
+}
+
+type BlogEdge {
+  cursor: String!
+  node: Blog!
+}
+
+type PageInfo {
+  endCursor: String
+  startCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+}
+
+type BlogConnection {
+  pageInfo: PageInfo
+  edges: [BlogEdge]
+  totalCount: Int
+}
+
+input createUserInput {
+  username: String!
+  email: String!
+  profilePicture: String
+  password: String!
+}
+
+input createBlogInput {
+  title: String!
+  description: String!
+  categories: [String!]
+  image: String!
+}
+
+input UpdateUserInput {
+  username: String
+  profilePicture: String
+  email: String
+}
