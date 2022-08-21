@@ -2,7 +2,7 @@ import Blog from "../models/Blog.js";
 import User from "../models/User.js";
 
 import { getAllBlogs, getSingleBlog } from "./Blog/Queries.js";
-import { login, register, updateUser } from "./User/Mutations.js";
+import { deleteUser, login, register, updateUser } from "./User/Mutations.js";
 import { commentOnBlog, createBlog, likeUnlikeBlog } from "./Blog/Mutations.js";
 import { getAllUsers, getSingleUser } from "./User/Queries.js";
 
@@ -21,6 +21,7 @@ export const resolvers = {
     register,
     login,
     update: updateUser,
+    delete: deleteUser,
 
     createBlog,
     likeUnlikeBlog,

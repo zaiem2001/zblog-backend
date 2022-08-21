@@ -8,6 +8,8 @@ const BlogSchema = new mongoose.Schema(
     categories: [{ type: String, default: [] }],
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 
+    deleted: { type: Boolean, default: false },
+
     likes: [{ type: String, default: [] }],
     comments: [
       {

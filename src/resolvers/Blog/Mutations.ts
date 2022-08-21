@@ -57,7 +57,7 @@ export const likeUnlikeBlog: ResolverFn<{ blogId: string }, any> = async (
 
   const userId = user._id.toString();
 
-  const blog = await Blog.findOne({ _id: blogId });
+  const blog = await Blog.findOne({ _id: blogId, deleted: false });
   rejectIf(!blog, ErrorMessages.notFound);
 
   const alreadyLiked = blog?.likes.some((like) => like === userId);
@@ -99,7 +99,7 @@ export const commentOnBlog: ResolverFn<
   };
 
   const updatedBlog = await Blog.findOneAndUpdate(
-    { _id: blogId },
+    { _id: blogId, deleted: false },
     {
       $push: { comments: commentObj },
     }

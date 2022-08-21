@@ -7,13 +7,14 @@ import { rejectIf } from "../../utils/ErrorHandler.js";
 
 type SearchQueryType = {
   categories?: any | null;
+  deleted: boolean;
 };
 
 export const getAllBlogs: ResolverFn<any, any> = async (
   _parent,
   { filter, sortBy }
 ) => {
-  const searchQuery: SearchQueryType = {};
+  const searchQuery: SearchQueryType = { deleted: false };
 
   const sortOrder = sortBy || { createdAt: -1 };
 
@@ -35,7 +36,7 @@ export const getSingleBlog: ResolverFn<{ id: string }, any> = async (
   _parent,
   { id }
 ) => {
-  const blog = await Blog.findById(id).populate(
+  const blog = await Blog.findOne({ _id: id, deleted: false }).populate(
     "user comments.user",
     "-password"
   );

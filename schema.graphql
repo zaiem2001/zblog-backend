@@ -27,6 +27,7 @@ type Mutation {
   register(input: createUserInput!): User
   login(email: String!, password: String!): LoginData
   update(input: UpdateUserInput): User
+  delete(id: ID): User
 
   createBlog(input: createBlogInput!): Blog
   likeUnlikeBlog(blogId: String!): Blog

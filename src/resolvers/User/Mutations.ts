@@ -1,11 +1,13 @@
 import bcrypt from "bcrypt";
+import mongoose from "mongoose";
 
 import { ErrorMessages, UPDATE_PROFILE_LIMIT } from "../../Constants/index.js";
 import { ResolverFn } from "../../Constants/Interfaces.js";
+// import Blog from "../../models/Blog.js";
 import User from "../../models/User.js";
 import { rejectIf } from "../../utils/ErrorHandler.js";
 import { generateToken } from "../../utils/generateToken.js";
-import { canUpdateProfile } from "../../utils/helpers.js";
+import { canUpdateProfile, isValidObjectId } from "../../utils/helpers.js";
 
 type RegisterInput = {
   input: {
@@ -56,6 +58,7 @@ export const login: ResolverFn<LoginInput, any> = async (
 
   const isValidPassword = await bcrypt.compare(password, user!.password);
   rejectIf(!isValidPassword, "Invalid Email or Password!");
+  rejectIf(user!.deleted, ErrorMessages.deleted);
 
   const token = generateToken({ _id: user!._id.toString() });
 
@@ -82,13 +85,14 @@ export const updateUser: ResolverFn<UpdateUserArgs, any> = async (
 
   const currentUser = await User.findOne({
     _id: user._id,
+    deleted: false,
   });
 
   rejectIf(!currentUser, ErrorMessages.notFound);
 
   rejectIf(
     !canUpdateProfile(currentUser!.updatedAt),
-    `You can update your profile after ${UPDATE_PROFILE_LIMIT} Hours!`
+    `You can update your profile after ${UPDATE_PROFILE_LIMIT + 1} Hours!`
   );
 
   const emailAlreadyExists = await User.findOne({ email: input.email });
@@ -118,4 +122,42 @@ export const updateUser: ResolverFn<UpdateUserArgs, any> = async (
   const updatedUser = await currentUser?.save();
 
   return updatedUser;
+};
+
+export const deleteUser: ResolverFn<{ id: string | undefined }, any> = async (
+  _parent,
+  { id },
+  { user }
+) => {
+  const target = {
+    id: id || user.id,
+    adminAuth: !!id,
+  };
+
+  rejectIf(!user, ErrorMessages.loggedIn);
+  rejectIf(!isValidObjectId(target.id), ErrorMessages.invalid);
+
+  if (target.adminAuth) {
+    rejectIf(!user.isAdmin, ErrorMessages.unAuthorized);
+  }
+
+  const deletedUser = await User.findOneAndUpdate(
+    {
+      _id: new mongoose.Types.ObjectId(target.id),
+    },
+    {
+      $set: { deleted: true },
+    }
+  );
+
+  // await Blog.updateMany(
+  //   {
+  //     user: new mongoose.Types.ObjectId(target.id),
+  //   },
+  //   {
+  //     $set: { deleted: true },
+  //   }
+  // );
+
+  return deletedUser;
 };
