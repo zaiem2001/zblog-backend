@@ -31,8 +31,8 @@ This apk is made using `Typescript`, `GraphQL`, `Apollo-server` and some other f
 
 create a `.env` file in your root directory and add :-
 
-> PORT= **4000**
-> JWT_SECRET= **YOUR JWT SECRET**
-> MONGO_URL= **mongodb://localhost:27017/blog**
+> - PORT= **4000**
+> - JWT_SECRET= **YOUR JWT SECRET**
+> - MONGO_URL= **mongodb://localhost:27017/blog**
 
 This **Mongo URL** is for the **local DB**, you can upadte this URL with your <br /> `Atlas cloud URL`.
