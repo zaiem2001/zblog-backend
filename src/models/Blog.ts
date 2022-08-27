@@ -1,5 +1,19 @@
 import mongoose from "mongoose";
 
+interface blogModel {
+  title: string;
+  description: string;
+  image: string;
+  categories: string[];
+  deleted: boolean;
+  comments: {}[];
+  user: string;
+  likes: string[];
+
+  createdAt?: Date;
+  updatedAt: string;
+}
+
 const BlogSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
@@ -24,6 +38,6 @@ const BlogSchema = new mongoose.Schema(
   }
 );
 
-const Blog = mongoose.model("Blog", BlogSchema);
+const Blog = mongoose.model<blogModel>("Blog", BlogSchema);
 
 export default Blog;

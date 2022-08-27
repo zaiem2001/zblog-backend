@@ -4,7 +4,12 @@ type Query {
   users: [User!]
   user(id: ID!): User
 
-  blogs(filter: FilterInput, sortBy: SortInput): [Blog!]
+  blogs(
+    filter: FilterInput
+    sortBy: SortInput
+    after: String
+    first: Int
+  ): BlogConnection
   blog(id: ID): Blog
 }
 
