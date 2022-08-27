@@ -3,7 +3,12 @@ import User from "../models/User.js";
 
 import { getAllBlogs, getSingleBlog } from "./Blog/Queries.js";
 import { deleteUser, login, register, updateUser } from "./User/Mutations.js";
-import { commentOnBlog, createBlog, likeUnlikeBlog } from "./Blog/Mutations.js";
+import {
+  commentOnBlog,
+  createBlog,
+  deleteBlog,
+  likeUnlikeBlog,
+} from "./Blog/Mutations.js";
 import { getAllUsers, getSingleUser } from "./User/Queries.js";
 
 export const resolvers = {
@@ -26,6 +31,7 @@ export const resolvers = {
     createBlog,
     likeUnlikeBlog,
     commentOnBlog,
+    deleteBlog,
   },
 
   User: {

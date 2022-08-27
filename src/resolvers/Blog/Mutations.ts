@@ -107,3 +107,27 @@ export const commentOnBlog: ResolverFn<
 
   return updatedBlog;
 };
+
+export const deleteBlog: ResolverFn<{ blogId: string }, any> = async (
+  _parent,
+  { blogId },
+  { user }
+) => {
+  rejectIf(!user, ErrorMessages.loggedIn);
+  rejectIf(!isValidObjectId(blogId), ErrorMessages.invalid);
+
+  const blog = await Blog.findOneAndUpdate(
+    {
+      _id: blogId,
+      user: new mongoose.Types.ObjectId(user.id),
+    },
+    {
+      $set: { deleted: true },
+    },
+    { new: true }
+  ).populate("user");
+
+  rejectIf(!blog, ErrorMessages.unAuthorized);
+
+  return blog;
+};

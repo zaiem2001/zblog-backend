@@ -32,6 +32,7 @@ type Mutation {
   createBlog(input: createBlogInput!): Blog
   likeUnlikeBlog(blogId: String!): Blog
   commentOnBlog(blogId: String!, comment: String!): Blog
+  deleteBlog(blogId: ID!): Blog
 }
 
 type User {
