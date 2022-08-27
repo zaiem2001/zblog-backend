@@ -5,8 +5,8 @@ export const isValidObjectId = (id: string): boolean => {
   return mongoose.isValidObjectId(id);
 };
 
-export const canUpdateProfile = (date: string) => {
-  if (!date.trim()) return true;
+export const canUpdateProfile = (date: any, createdAt: any) => {
+  if (date.toString() === createdAt.toString()) return true;
 
   const currentDate = new Date();
 

@@ -43,7 +43,6 @@ export const register: ResolverFn<RegisterInput, any> = async (
     username,
     email,
     password: hashedPassword,
-    createdAt: new Date(),
   }).save();
 
   return registeredUser;
@@ -91,7 +90,7 @@ export const updateUser: ResolverFn<UpdateUserArgs, any> = async (
   rejectIf(!currentUser, ErrorMessages.notFound);
 
   rejectIf(
-    !canUpdateProfile(currentUser!.updatedAt),
+    !canUpdateProfile(currentUser!.updatedAt, currentUser!.createdAt),
     `You can update your profile after ${UPDATE_PROFILE_LIMIT + 1} Hours!`
   );
 
@@ -115,8 +114,6 @@ export const updateUser: ResolverFn<UpdateUserArgs, any> = async (
     currentUser.username = input.username || currentUser?.username;
     currentUser.profilePicture =
       input.profilePicture || currentUser?.profilePicture;
-
-    currentUser.updatedAt = new Date().toString();
   }
 
   const updatedUser = await currentUser?.save();
@@ -161,3 +158,5 @@ export const deleteUser: ResolverFn<{ id: string | undefined }, any> = async (
 
   return deletedUser;
 };
+
+// https://firebasestorage.googleapis.com/v0/b/z-blog-369a2.appspot.com/o/images%2FLOGO.png?alt=media&token=649a5246-9aa2-4731-9cf9-cf1804bc21b4

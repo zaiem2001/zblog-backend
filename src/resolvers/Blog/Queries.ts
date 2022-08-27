@@ -12,24 +12,53 @@ type SearchQueryType = {
 
 export const getAllBlogs: ResolverFn<any, any> = async (
   _parent,
-  { filter, sortBy }
+  { filter, sortBy, after, first = 6 }
 ) => {
   const searchQuery: SearchQueryType = { deleted: false };
 
+  const whereOptions = after
+    ? {
+        $where: "this.createdAt <" + after,
+      }
+    : {};
+
   const sortOrder = sortBy || { createdAt: -1 };
 
-  if (filter.categories) {
+  if (filter && filter.categories) {
     searchQuery.categories = { $in: filter.categories };
   }
 
   const blogs = await Blog.find({
-    ...(filter.user ? { user: new mongoose.Types.ObjectId(filter.user) } : {}),
+    ...whereOptions,
+    ...(filter?.user
+      ? { user: new mongoose.Types.ObjectId(filter?.user) }
+      : {}),
     ...searchQuery,
   })
+    .limit(first + 1)
     .populate("user", "-password")
     .sort(sortOrder);
 
-  return blogs;
+  const hasNextPage = blogs.length > first;
+  const hasPreviousPage = false;
+
+  if (hasNextPage) {
+    blogs.pop();
+  }
+
+  return {
+    totalCount: blogs.length,
+    edges: blogs.map((blog) => ({
+      cursor: blog.createdAt,
+      node: blog,
+    })),
+    pageInfo: {
+      startCursor: blogs[0] ? blogs[0].createdAt : null,
+      endCursor: blogs[blogs.length - 1].createdAt,
+      hasNextPage,
+      hasPreviousPage,
+    },
+  };
 };
 
 export const getSingleBlog: ResolverFn<{ id: string }, any> = async (

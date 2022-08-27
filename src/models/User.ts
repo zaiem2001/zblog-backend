@@ -11,23 +11,23 @@ interface UserModel {
   isAdmin: boolean;
 
   createdAt?: Date;
-  updatedAt: string;
+  updatedAt: Date;
 }
 
-const UserSchema = new mongoose.Schema({
-  username: { type: String, required: true, unique: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  profilePicture: { type: String, default: "" },
+const UserSchema = new mongoose.Schema(
+  {
+    username: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    profilePicture: { type: String, default: "" },
 
-  deleted: { type: Boolean, default: false },
+    deleted: { type: Boolean, default: false },
 
-  blogs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Blog" }],
-  isAdmin: { type: Boolean, default: false },
-
-  createdAt: { type: Date },
-  updatedAt: { type: String, default: "" },
-});
+    blogs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Blog" }],
+    isAdmin: { type: Boolean, default: false },
+  },
+  { timestamps: true }
+);
 
 const User = mongoose.model<UserModel>("User", UserSchema);
 
