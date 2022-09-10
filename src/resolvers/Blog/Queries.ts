@@ -18,7 +18,7 @@ export const getAllBlogs: ResolverFn<any, any> = async (
 
   const whereOptions = after
     ? {
-        $where: "this.createdAt <" + after,
+        createdAt: { $lt: after },
       }
     : {};
 

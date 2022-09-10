@@ -10,6 +10,7 @@ import {
   likeUnlikeBlog,
 } from "./Blog/Mutations.js";
 import { getAllUsers, getSingleUser } from "./User/Queries.js";
+import { populateBlogCollection } from "./Seeder/index.js";
 
 export const resolvers = {
   Query: {
@@ -20,6 +21,8 @@ export const resolvers = {
 
     blogs: getAllBlogs,
     blog: getSingleBlog,
+
+    seeder: populateBlogCollection,
   },
 
   Mutation: {

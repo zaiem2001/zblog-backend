@@ -11,6 +11,8 @@ type Query {
     first: Int
   ): BlogConnection
   blog(id: ID): Blog
+
+  seeder(token: String): String
 }
 
 input FilterInput {
