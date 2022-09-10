@@ -39,6 +39,7 @@ const ApolloServerInstance = new ApolloServer({
   typeDefs,
   resolvers,
   context,
+  introspection: true,
   formatError: (err: GraphQLError) => {
     console.log("FormatErrro:: ", err);
     if (err.originalError instanceof AuthenticationError) {
