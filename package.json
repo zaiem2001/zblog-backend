@@ -6,7 +6,8 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon dist/server.js",
-    "build": "tsc"
+    "tsc": "tsc",
+    "build": "npm run tsc"
   },
   "keywords": [
     "blog",
