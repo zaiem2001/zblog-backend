@@ -10,8 +10,7 @@
   "scripts": {
     "start": "node dist/server.js",
     "tsc": "./node_modules/typescript/bin/tsc",
-    "build": "npm install && tsc",
-    "postinstall": "npm run build"
+    "build": "npm install && tsc"
   },
   "keywords": [
     "blog",
